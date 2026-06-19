@@ -1,0 +1,370 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Ghostlight — Theatre Log</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400..900;1,400..700&family=EB+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500&display=swap" rel="stylesheet">
+<style>
+  * { box-sizing: border-box; }
+  html, body { margin:0; padding:0; height:100%; background:#070205; overflow:hidden; }
+  body { font-family:'EB Garamond', Georgia, serif; }
+
+  @keyframes spotPulse { 0%,100%{ opacity:.92 } 50%{ opacity:1 } }
+  @keyframes fadeIn { from{ opacity:0 } to{ opacity:1 } }
+  @keyframes searchRise { from{ opacity:0; transform:translateY(18px) } to{ opacity:1; transform:translateY(0) } }
+
+  #stage {
+    position:fixed; inset:0; overflow:hidden;
+    background:radial-gradient(ellipse 80% 70% at 50% 50%, #160810 0%, #070205 74%);
+  }
+
+  /* curtain */
+  #curtain { position:absolute; inset:0; z-index:1; }
+  .fold {
+    position:absolute; top:-3%; bottom:-3%; left:0;
+    background:linear-gradient(90deg, #2c0912 0%, #51101f 14%, #82182f 41%, #98203c 51%, #5e1122 78%, #2c0912 100%);
+    box-shadow:inset 5px 0 13px rgba(0,0,0,.45), inset -5px 0 13px rgba(0,0,0,.4);
+    will-change:transform; transform-origin:50% 0;
+  }
+
+  /* spotlight */
+  .spot { position:fixed; inset:0; z-index:2; pointer-events:none; }
+  .spot-glow {
+    background:radial-gradient(circle 480px at 50% 50%, rgba(255,224,160,.72) 0%, rgba(255,214,140,.58) 42%, rgba(255,200,110,.28) 68%, rgba(255,190,90,0) 80%);
+    mix-blend-mode:screen; animation:spotPulse 6.5s ease-in-out infinite;
+  }
+  .spot-vignette {
+    background:radial-gradient(circle 480px at 50% 50%, transparent 0%, transparent 55%, rgba(0,0,0,.32) 66%, rgba(0,0,0,.72) 100%);
+  }
+
+  /* stamps */
+  #stamps { position:fixed; inset:0; z-index:3; }
+  #stamp-field { position:absolute; left:50%; top:50%; transform:translate(-50%,-50%); width:600px; height:420px; }
+  .stamp {
+    position:absolute; width:150px; cursor:grab; touch-action:none;
+    user-select:none; -webkit-user-select:none;
+    filter:drop-shadow(0 5px 10px rgba(0,0,0,.38));
+  }
+  .stamp.dragging { cursor:grabbing; }
+  .paper {
+    background:#f4ecda; padding:8px;
+    -webkit-mask-image:radial-gradient(5px at 50% 0,#0000 98%,#000),radial-gradient(5px at 50% 100%,#0000 98%,#000),radial-gradient(5px at 0 50%,#0000 98%,#000),radial-gradient(5px at 100% 50%,#0000 98%,#000);
+    mask-image:radial-gradient(5px at 50% 0,#0000 98%,#000),radial-gradient(5px at 50% 100%,#0000 98%,#000),radial-gradient(5px at 0 50%,#0000 98%,#000),radial-gradient(5px at 100% 50%,#0000 98%,#000);
+    -webkit-mask-position:0 0,0 100%,0 0,100% 0; mask-position:0 0,0 100%,0 0,100% 0;
+    -webkit-mask-size:17px 100%,17px 100%,100% 17px,100% 17px; mask-size:17px 100%,17px 100%,100% 17px,100% 17px;
+    -webkit-mask-repeat:repeat-x,repeat-x,repeat-y,repeat-y; mask-repeat:repeat-x,repeat-x,repeat-y,repeat-y;
+    -webkit-mask-composite:source-in; mask-composite:intersect;
+  }
+  .art { position:relative; height:172px; overflow:hidden; border:1px solid rgba(0,0,0,.18); }
+  .corner-l { position:absolute; top:7px; left:8px; font-family:'EB Garamond',serif; font-weight:600; font-size:8px; letter-spacing:.18em; }
+  .corner-r { position:absolute; top:6px; right:8px; font-family:'Playfair Display',serif; font-weight:700; font-size:13px; color:#fff; }
+  .corner-r small { font-size:7px; }
+  .caption { padding:8px 4px 4px; text-align:center; }
+  .caption .title { font-family:'Playfair Display',serif; font-weight:700; line-height:1.02; color:#2a1208; }
+  .caption .venue { font-family:'EB Garamond',serif; font-size:7.5px; letter-spacing:.2em; color:#9a6a32; margin-top:3px; text-transform:uppercase; }
+
+  /* title */
+  #title-bar {
+    position:absolute; top:0; left:0; right:0; z-index:6;
+    display:flex; align-items:flex-start; justify-content:center;
+    padding:36px 36px 0; pointer-events:none;
+  }
+  #title-bar h1 {
+    margin:0; font-family:'Playfair Display', serif; font-style:italic; font-weight:700;
+    color:#f3d9a0; font-size:clamp(30px,5vw,66px); letter-spacing:.01em; text-align:center;
+    text-shadow:0 2px 18px rgba(0,0,0,.7), 0 0 40px rgba(255,220,150,.3);
+  }
+
+  /* search button */
+  #search-btn {
+    position:absolute; top:30px; right:32px; z-index:7;
+    width:48px; height:48px; border:none; background:transparent; cursor:pointer; padding:0;
+  }
+  #search-btn .ring {
+    position:absolute; top:9px; left:9px; width:22px; height:22px;
+    border:3px solid #f3d9a0; border-radius:50%; box-shadow:0 0 12px rgba(255,220,150,.3);
+  }
+  #search-btn .handle {
+    position:absolute; top:30px; left:28px; width:13px; height:3px;
+    background:#f3d9a0; border-radius:2px; transform:rotate(45deg); transform-origin:left center;
+  }
+
+  /* search overlay */
+  #search-overlay {
+    position:fixed; inset:0; z-index:50; background:rgba(7,2,5,.96); backdrop-filter:blur(5px);
+    display:flex; flex-direction:column; align-items:center; justify-content:center; gap:30px;
+    animation:fadeIn .3s ease;
+  }
+  #search-overlay[hidden] { display:none; }
+  #search-overlay .label {
+    font-family:'EB Garamond',serif; font-size:12px; letter-spacing:.42em; color:#b88a4a;
+    text-transform:uppercase; animation:searchRise .4s ease both;
+  }
+  #search-overlay input {
+    width:min(660px,84vw); background:transparent; border:none; border-bottom:2px solid #f3d9a0;
+    color:#f3e6c8; font-family:'Playfair Display',serif; font-style:italic;
+    font-size:clamp(26px,4.2vw,42px); text-align:center; padding:14px 10px; outline:none;
+    animation:searchRise .45s ease both;
+  }
+  #search-overlay .hint {
+    font-family:'EB Garamond',serif; font-size:11px; letter-spacing:.06em; color:#7a6552;
+    animation:searchRise .5s ease both;
+  }
+</style>
+</head>
+<body>
+<div id="stage">
+
+  <!-- ============ CURTAIN WALL ============ -->
+  <div id="curtain"></div>
+
+  <!-- ============ ROUND SPOTLIGHT ============ -->
+  <div class="spot spot-glow"></div>
+  <div class="spot spot-vignette"></div>
+
+  <!-- ============ STAMP STACK ============ -->
+  <div id="stamps">
+    <div id="stamp-field">
+
+      <!-- THE LION KING -->
+      <div class="stamp" data-stamp="lk">
+        <div class="paper">
+          <div class="art" style="background:linear-gradient(180deg,#f3ad45 0%,#e87a2b 52%,#9c3d16 100%);">
+            <div style="position:absolute; left:50%; bottom:32px; transform:translateX(-50%); width:66px; height:66px; border-radius:50%; background:radial-gradient(circle,#fff3c4 0%,#ffd24d 46%,#f59a2e 82%); box-shadow:0 0 28px rgba(255,210,90,.85);"></div>
+            <div style="position:absolute; left:0; right:0; bottom:0; height:40px; background:linear-gradient(180deg,transparent,#3a1408);"></div>
+            <div style="position:absolute; left:0; bottom:0; width:0; height:0; border-right:54px solid transparent; border-bottom:46px solid #2a0f06;"></div>
+            <div style="position:absolute; right:0; bottom:0; width:0; height:0; border-left:70px solid transparent; border-bottom:34px solid #2a0f06;"></div>
+            <span class="corner-l" style="color:rgba(255,255,255,.9);">WEST END</span>
+            <span class="corner-r">1<small>ST</small></span>
+          </div>
+          <div class="caption">
+            <div class="title" style="font-size:13px;">The Lion King</div>
+            <div class="venue">London · Lyceum</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- THE PHANTOM OF THE OPERA -->
+      <div class="stamp" data-stamp="phantom">
+        <div class="paper">
+          <div class="art" style="background:radial-gradient(circle at 50% 42%,#5a0a14 0%,#1a0207 72%);">
+            <div style="position:absolute; left:50%; top:50%; transform:translate(-56%,-50%) rotate(-7deg); width:58px; height:80px; background:linear-gradient(135deg,#ffffff,#ded7c6); border-radius:60% 42% 55% 45%/56% 46% 60% 40%; box-shadow:0 4px 14px rgba(0,0,0,.55);"></div>
+            <div style="position:absolute; left:50%; top:44%; transform:translate(-94%,-50%) rotate(-7deg); width:16px; height:11px; background:#15040a; border-radius:50%;"></div>
+            <div style="position:absolute; left:58%; bottom:22px; width:10px; height:10px; border-radius:50%; background:radial-gradient(circle,#ff5a6a,#b00f25);"></div>
+            <div style="position:absolute; left:60%; bottom:8px; width:2px; height:16px; background:#1f5e2a; transform:rotate(8deg);"></div>
+            <span class="corner-l" style="color:rgba(255,255,255,.82);">WEST END</span>
+            <span class="corner-r">1<small>ST</small></span>
+          </div>
+          <div class="caption">
+            <div class="title" style="font-size:11.5px;">The Phantom of the Opera</div>
+            <div class="venue">London · West End</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- WICKED -->
+      <div class="stamp" data-stamp="wicked">
+        <div class="paper">
+          <div class="art" style="background:radial-gradient(circle at 50% 64%,#21794f 0%,#0c4129 58%,#05231a 100%);">
+            <div style="position:absolute; left:50%; top:14px; transform:translateX(-50%); width:96px; height:96px; border-radius:50%; background:radial-gradient(circle,rgba(120,255,180,.32),transparent 70%);"></div>
+            <div style="position:absolute; left:50%; bottom:40px; transform:translateX(-50%); width:84px; height:18px; background:#0a0a0a; border-radius:50%;"></div>
+            <div style="position:absolute; left:50%; bottom:47px; transform:translateX(-52%) rotate(4deg); width:0; height:0; border-left:27px solid transparent; border-right:27px solid transparent; border-bottom:66px solid #0a0a0a;"></div>
+            <span class="corner-l" style="color:rgba(255,255,255,.85);">WEST END</span>
+            <span class="corner-r">1<small>ST</small></span>
+          </div>
+          <div class="caption">
+            <div class="title" style="font-size:13px;">Wicked</div>
+            <div class="venue">London · Apollo Victoria</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- LES MISÉRABLES -->
+      <div class="stamp" data-stamp="lesmis">
+        <div class="paper">
+          <div class="art" style="background:linear-gradient(180deg,#16264f 0%,#0a1430 58%,#1a0f2e 100%);">
+            <div style="position:absolute; left:50%; top:44%; transform:translate(-50%,-50%); width:54px; height:54px; background:radial-gradient(circle,#ffe9a8,#e8b94f); clip-path:polygon(50% 0,61% 35%,98% 35%,68% 57%,79% 91%,50% 70%,21% 91%,32% 57%,2% 35%,39% 35%); box-shadow:0 0 20px rgba(255,210,120,.55);"></div>
+            <div style="position:absolute; left:0; right:0; bottom:0; height:15px; background:linear-gradient(90deg,#2a4bd0 0 33.3%,#f4ecda 33.3% 66.6%,#c0182f 66.6% 100%); opacity:.92;"></div>
+            <span class="corner-l" style="color:rgba(255,255,255,.85);">WEST END</span>
+            <span class="corner-r">1<small>ST</small></span>
+          </div>
+          <div class="caption">
+            <div class="title" style="font-size:12.5px;">Les Misérables</div>
+            <div class="venue">London · Sondheim</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- MAMMA MIA! -->
+      <div class="stamp" data-stamp="mamma">
+        <div class="paper">
+          <div class="art" style="background:linear-gradient(180deg,#33a0dd 0%,#1f78bd 54%,#eef2f5 54%,#dde6ee 100%);">
+            <div style="position:absolute; left:50%; top:30px; transform:translateX(-50%); width:44px; height:44px; border-radius:50%; background:radial-gradient(circle,#fffef2,#ffe49a); box-shadow:0 0 24px rgba(255,235,160,.9);"></div>
+            <div style="position:absolute; left:50%; bottom:22px; transform:translateX(-50%); width:34px; height:34px; background:#ef5d6e; clip-path:polygon(50% 88%,12% 50%,12% 30%,30% 18%,50% 30%,70% 18%,88% 30%,88% 50%);"></div>
+            <span class="corner-l" style="color:rgba(255,255,255,.95);">WEST END</span>
+            <span class="corner-r">1<small>ST</small></span>
+          </div>
+          <div class="caption">
+            <div class="title" style="font-size:13px;">Mamma Mia!</div>
+            <div class="venue">London · Novello</div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ============ TITLE ============ -->
+  <div id="title-bar"><h1>Ghostlight</h1></div>
+
+  <!-- ============ SEARCH BUTTON ============ -->
+  <button id="search-btn" aria-label="Search">
+    <span class="ring"></span>
+    <span class="handle"></span>
+  </button>
+
+  <!-- ============ FULL-PAGE SEARCH ============ -->
+  <div id="search-overlay" hidden>
+    <div class="label">Search the Repertoire</div>
+    <input id="search-input" type="text" placeholder="Title, theatre, or date seen…" autocomplete="off">
+    <div class="hint">Press Esc, or click anywhere, to close</div>
+  </div>
+
+</div>
+
+<script>
+(function () {
+  'use strict';
+
+  /* ---------- curtain folds ---------- */
+  var FOLD_COUNT = 16;
+  var curtain = document.getElementById('curtain');
+  var folds = [];
+  for (var i = 0; i < FOLD_COUNT; i++) {
+    var f = document.createElement('div');
+    f.className = 'fold';
+    curtain.appendChild(f);
+    folds.push(f);
+  }
+
+  function layoutFolds() {
+    var N = folds.length || 1;
+    var step = 100 / N;
+    var w = step * 1.55;
+    folds.forEach(function (el, i) {
+      el.style.width = w + '%';
+      el.style.left = (i * step - (w - step) / 2) + '%';
+      el.dataset.center = (i * step + step / 2);
+    });
+  }
+
+  /* ---------- animation loop ---------- */
+  var t0 = performance.now();
+  var mouseX = window.innerWidth / 2;
+  window.addEventListener('mousemove', function (e) { mouseX = e.clientX; }, { passive: true });
+  window.addEventListener('resize', layoutFolds);
+
+  function loop(now) {
+    var t = now - t0;
+    var W = window.innerWidth;
+    folds.forEach(function (el, i) {
+      var cx = (parseFloat(el.dataset.center || 50) / 100) * W;
+      var phase = i * 0.55;
+      var idle = Math.sin(t * 0.0011 + phase) * 5;
+      var d = mouseX - cx;
+      var dist = d / W;
+      var infl = Math.exp(-dist * dist * 9);
+      var lean = d * 0.035 * infl;
+      var sway = idle + lean;
+      var breathe = 1 + 0.012 * Math.sin(t * 0.0011 + phase);
+      el.style.transform = 'translateX(' + sway.toFixed(2) + 'px) skewX(' + (sway * 0.05).toFixed(3) + 'deg) scaleY(' + breathe.toFixed(4) + ')';
+    });
+    requestAnimationFrame(loop);
+  }
+
+  /* ---------- draggable stamps ---------- */
+  var initial = {
+    lk:      { x: 150, y: 60,  rot: -12, z: 2 },
+    phantom: { x: 235, y: 46,  rot: 7,   z: 4 },
+    wicked:  { x: 300, y: 72,  rot: 14,  z: 1 },
+    lesmis:  { x: 175, y: 150, rot: -7,  z: 3 },
+    mamma:   { x: 268, y: 166, rot: 10,  z: 5 },
+  };
+  var stamps = {};
+  var topZ = 5;
+
+  function applyStamp(id) {
+    var s = stamps[id];
+    var el = s.el;
+    el.style.left = s.x + 'px';
+    el.style.top = s.y + 'px';
+    el.style.transform = 'rotate(' + s.rot + 'deg)';
+    el.style.zIndex = s.z;
+  }
+
+  function bringFront(id) {
+    topZ += 1;
+    stamps[id].z = topZ;
+    stamps[id].el.style.zIndex = topZ;
+  }
+
+  var drag = null;
+  function onMove(e) {
+    if (!drag) return;
+    var s = stamps[drag.id];
+    s.x = drag.x0 + (e.clientX - drag.sx);
+    s.y = drag.y0 + (e.clientY - drag.sy);
+    s.el.style.left = s.x + 'px';
+    s.el.style.top = s.y + 'px';
+  }
+  function onUp() {
+    if (drag) drag.el.classList.remove('dragging');
+    drag = null;
+    window.removeEventListener('pointermove', onMove);
+    window.removeEventListener('pointerup', onUp);
+  }
+
+  Array.prototype.forEach.call(document.querySelectorAll('.stamp'), function (el) {
+    var id = el.dataset.stamp;
+    stamps[id] = Object.assign({ el: el }, initial[id]);
+    applyStamp(id);
+    el.addEventListener('pointerdown', function (e) {
+      e.preventDefault();
+      var s = stamps[id];
+      drag = { id: id, el: el, sx: e.clientX, sy: e.clientY, x0: s.x, y0: s.y };
+      el.classList.add('dragging');
+      bringFront(id);
+      window.addEventListener('pointermove', onMove);
+      window.addEventListener('pointerup', onUp);
+    });
+  });
+
+  /* ---------- search overlay ---------- */
+  var overlay = document.getElementById('search-overlay');
+  var input = document.getElementById('search-input');
+
+  function openSearch() {
+    overlay.hidden = false;
+    input.focus();
+  }
+  function closeSearch() {
+    overlay.hidden = true;
+  }
+
+  document.getElementById('search-btn').addEventListener('click', openSearch);
+  overlay.addEventListener('click', closeSearch);
+  input.addEventListener('click', function (e) { e.stopPropagation(); });
+  window.addEventListener('keydown', function (e) {
+    if (e.key === 'Escape') closeSearch();
+  });
+
+  /* ---------- boot ---------- */
+  layoutFolds();
+  requestAnimationFrame(loop);
+})();
+</script>
+</body>
+</html>

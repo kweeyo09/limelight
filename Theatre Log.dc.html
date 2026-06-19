@@ -1,0 +1,277 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400..900;1,400..700&family=EB+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500&display=swap" rel="stylesheet">
+  <style>
+    * { box-sizing: border-box; }
+    html, body { margin:0; padding:0; height:100%; background:#070205; overflow:hidden; }
+    @keyframes spotPulse { 0%,100%{ opacity:.92 } 50%{ opacity:1 } }
+    @keyframes fadeIn { from{ opacity:0 } to{ opacity:1 } }
+    @keyframes searchRise { from{ opacity:0; transform:translateY(18px) } to{ opacity:1; transform:translateY(0) } }
+  </style>
+</helmet>
+<div ref="{{ setRoot }}" style="position:fixed; inset:0; overflow:hidden; background:radial-gradient(ellipse 80% 70% at 50% 50%, #160810 0%, #070205 74%); font-family:'EB Garamond', Georgia, serif;">
+
+  <!-- ============ CURTAIN WALL ============ -->
+  <div style="position:absolute; inset:0; z-index:1;">
+    <sc-for list="{{ folds }}" as="fold" hint-placeholder-count="16">
+      <div data-fold="1" style="position:absolute; top:-3%; bottom:-3%; left:0; background:linear-gradient(90deg, #2c0912 0%, #51101f 14%, #82182f 41%, #98203c 51%, #5e1122 78%, #2c0912 100%); box-shadow:inset 5px 0 13px rgba(0,0,0,.45), inset -5px 0 13px rgba(0,0,0,.4); will-change:transform; transform-origin:50% 0;"></div>
+    </sc-for>
+  </div>
+
+  <!-- ============ ROUND SPOTLIGHT ============ -->
+  <div style="position:fixed; inset:0; z-index:2; pointer-events:none; background:radial-gradient(circle 480px at 50% 50%, rgba(255,224,160,.72) 0%, rgba(255,214,140,.58) 42%, rgba(255,200,110,.28) 68%, rgba(255,190,90,0) 80%); mix-blend-mode:screen; animation:spotPulse 6.5s ease-in-out infinite;"></div>
+  <div style="position:fixed; inset:0; z-index:2; pointer-events:none; background:radial-gradient(circle 480px at 50% 50%, transparent 0%, transparent 55%, rgba(0,0,0,.32) 66%, rgba(0,0,0,.72) 100%);"></div>
+
+  <!-- ============ STAMP STACK ============ -->
+  <div style="position:fixed; inset:0; z-index:3;">
+    <div style="position:absolute; left:50%; top:50%; transform:translate(-50%,-50%); width:600px; height:420px;">
+
+      <!-- THE LION KING -->
+      <div data-stamp="lk" style="{{ st_lk }}" onPointerDown="{{ pd_lk }}">
+        <div data-paper="1" style="background:#f4ecda; padding:8px; -webkit-mask-image:radial-gradient(5px at 50% 0,#0000 98%,#000),radial-gradient(5px at 50% 100%,#0000 98%,#000),radial-gradient(5px at 0 50%,#0000 98%,#000),radial-gradient(5px at 100% 50%,#0000 98%,#000); mask-image:radial-gradient(5px at 50% 0,#0000 98%,#000),radial-gradient(5px at 50% 100%,#0000 98%,#000),radial-gradient(5px at 0 50%,#0000 98%,#000),radial-gradient(5px at 100% 50%,#0000 98%,#000); -webkit-mask-position:0 0,0 100%,0 0,100% 0; mask-position:0 0,0 100%,0 0,100% 0; -webkit-mask-size:17px 100%,17px 100%,100% 17px,100% 17px; mask-size:17px 100%,17px 100%,100% 17px,100% 17px; -webkit-mask-repeat:repeat-x,repeat-x,repeat-y,repeat-y; mask-repeat:repeat-x,repeat-x,repeat-y,repeat-y; -webkit-mask-composite:source-in; mask-composite:intersect;">
+          <div style="position:relative; height:172px; overflow:hidden; background:linear-gradient(180deg,#f3ad45 0%,#e87a2b 52%,#9c3d16 100%); border:1px solid rgba(0,0,0,.18);">
+            <div style="position:absolute; left:50%; bottom:32px; transform:translateX(-50%); width:66px; height:66px; border-radius:50%; background:radial-gradient(circle,#fff3c4 0%,#ffd24d 46%,#f59a2e 82%); box-shadow:0 0 28px rgba(255,210,90,.85);"></div>
+            <div style="position:absolute; left:0; right:0; bottom:0; height:40px; background:linear-gradient(180deg,transparent,#3a1408);"></div>
+            <div style="position:absolute; left:0; bottom:0; width:0; height:0; border-right:54px solid transparent; border-bottom:46px solid #2a0f06;"></div>
+            <div style="position:absolute; right:0; bottom:0; width:0; height:0; border-left:70px solid transparent; border-bottom:34px solid #2a0f06;"></div>
+            <span style="position:absolute; top:7px; left:8px; font-family:'EB Garamond',serif; font-weight:600; font-size:8px; letter-spacing:.18em; color:rgba(255,255,255,.9);">WEST END</span>
+            <span style="position:absolute; top:6px; right:8px; font-family:'Playfair Display',serif; font-weight:700; font-size:13px; color:#fff;">1<span style="font-size:7px;">ST</span></span>
+          </div>
+          <div style="padding:8px 4px 4px; text-align:center;">
+            <div style="font-family:'Playfair Display',serif; font-weight:700; font-size:13px; line-height:1.02; color:#2a1208;">The Lion King</div>
+            <div style="font-family:'EB Garamond',serif; font-size:7.5px; letter-spacing:.2em; color:#9a6a32; margin-top:3px; text-transform:uppercase;">London · Lyceum</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- THE PHANTOM OF THE OPERA -->
+      <div data-stamp="phantom" style="{{ st_phantom }}" onPointerDown="{{ pd_phantom }}">
+        <div data-paper="1" style="background:#f4ecda; padding:8px; -webkit-mask-image:radial-gradient(5px at 50% 0,#0000 98%,#000),radial-gradient(5px at 50% 100%,#0000 98%,#000),radial-gradient(5px at 0 50%,#0000 98%,#000),radial-gradient(5px at 100% 50%,#0000 98%,#000); mask-image:radial-gradient(5px at 50% 0,#0000 98%,#000),radial-gradient(5px at 50% 100%,#0000 98%,#000),radial-gradient(5px at 0 50%,#0000 98%,#000),radial-gradient(5px at 100% 50%,#0000 98%,#000); -webkit-mask-position:0 0,0 100%,0 0,100% 0; mask-position:0 0,0 100%,0 0,100% 0; -webkit-mask-size:17px 100%,17px 100%,100% 17px,100% 17px; mask-size:17px 100%,17px 100%,100% 17px,100% 17px; -webkit-mask-repeat:repeat-x,repeat-x,repeat-y,repeat-y; mask-repeat:repeat-x,repeat-x,repeat-y,repeat-y; -webkit-mask-composite:source-in; mask-composite:intersect;">
+          <div style="position:relative; height:172px; overflow:hidden; background:radial-gradient(circle at 50% 42%,#5a0a14 0%,#1a0207 72%); border:1px solid rgba(0,0,0,.18);">
+            <div style="position:absolute; left:50%; top:50%; transform:translate(-56%,-50%) rotate(-7deg); width:58px; height:80px; background:linear-gradient(135deg,#ffffff,#ded7c6); border-radius:60% 42% 55% 45%/56% 46% 60% 40%; box-shadow:0 4px 14px rgba(0,0,0,.55);"></div>
+            <div style="position:absolute; left:50%; top:44%; transform:translate(-94%,-50%) rotate(-7deg); width:16px; height:11px; background:#15040a; border-radius:50%;"></div>
+            <div style="position:absolute; left:58%; bottom:22px; width:10px; height:10px; border-radius:50%; background:radial-gradient(circle,#ff5a6a,#b00f25);"></div>
+            <div style="position:absolute; left:60%; bottom:8px; width:2px; height:16px; background:#1f5e2a; transform:rotate(8deg);"></div>
+            <span style="position:absolute; top:7px; left:8px; font-family:'EB Garamond',serif; font-weight:600; font-size:8px; letter-spacing:.18em; color:rgba(255,255,255,.82);">WEST END</span>
+            <span style="position:absolute; top:6px; right:8px; font-family:'Playfair Display',serif; font-weight:700; font-size:13px; color:#fff;">1<span style="font-size:7px;">ST</span></span>
+          </div>
+          <div style="padding:8px 4px 4px; text-align:center;">
+            <div style="font-family:'Playfair Display',serif; font-weight:700; font-size:11.5px; line-height:1.04; color:#2a1208;">The Phantom of the Opera</div>
+            <div style="font-family:'EB Garamond',serif; font-size:7.5px; letter-spacing:.2em; color:#9a6a32; margin-top:2px; text-transform:uppercase;">London · West End</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- WICKED -->
+      <div data-stamp="wicked" style="{{ st_wicked }}" onPointerDown="{{ pd_wicked }}">
+        <div data-paper="1" style="background:#f4ecda; padding:8px; -webkit-mask-image:radial-gradient(5px at 50% 0,#0000 98%,#000),radial-gradient(5px at 50% 100%,#0000 98%,#000),radial-gradient(5px at 0 50%,#0000 98%,#000),radial-gradient(5px at 100% 50%,#0000 98%,#000); mask-image:radial-gradient(5px at 50% 0,#0000 98%,#000),radial-gradient(5px at 50% 100%,#0000 98%,#000),radial-gradient(5px at 0 50%,#0000 98%,#000),radial-gradient(5px at 100% 50%,#0000 98%,#000); -webkit-mask-position:0 0,0 100%,0 0,100% 0; mask-position:0 0,0 100%,0 0,100% 0; -webkit-mask-size:17px 100%,17px 100%,100% 17px,100% 17px; mask-size:17px 100%,17px 100%,100% 17px,100% 17px; -webkit-mask-repeat:repeat-x,repeat-x,repeat-y,repeat-y; mask-repeat:repeat-x,repeat-x,repeat-y,repeat-y; -webkit-mask-composite:source-in; mask-composite:intersect;">
+          <div style="position:relative; height:172px; overflow:hidden; background:radial-gradient(circle at 50% 64%,#21794f 0%,#0c4129 58%,#05231a 100%); border:1px solid rgba(0,0,0,.18);">
+            <div style="position:absolute; left:50%; top:14px; transform:translateX(-50%); width:96px; height:96px; border-radius:50%; background:radial-gradient(circle,rgba(120,255,180,.32),transparent 70%);"></div>
+            <div style="position:absolute; left:50%; bottom:40px; transform:translateX(-50%); width:84px; height:18px; background:#0a0a0a; border-radius:50%;"></div>
+            <div style="position:absolute; left:50%; bottom:47px; transform:translateX(-52%) rotate(4deg); width:0; height:0; border-left:27px solid transparent; border-right:27px solid transparent; border-bottom:66px solid #0a0a0a;"></div>
+            <span style="position:absolute; top:7px; left:8px; font-family:'EB Garamond',serif; font-weight:600; font-size:8px; letter-spacing:.18em; color:rgba(255,255,255,.85);">WEST END</span>
+            <span style="position:absolute; top:6px; right:8px; font-family:'Playfair Display',serif; font-weight:700; font-size:13px; color:#fff;">1<span style="font-size:7px;">ST</span></span>
+          </div>
+          <div style="padding:8px 4px 4px; text-align:center;">
+            <div style="font-family:'Playfair Display',serif; font-weight:700; font-size:13px; line-height:1.02; color:#2a1208;">Wicked</div>
+            <div style="font-family:'EB Garamond',serif; font-size:7.5px; letter-spacing:.2em; color:#9a6a32; margin-top:3px; text-transform:uppercase;">London · Apollo Victoria</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- LES MISÉRABLES -->
+      <div data-stamp="lesmis" style="{{ st_lesmis }}" onPointerDown="{{ pd_lesmis }}">
+        <div data-paper="1" style="background:#f4ecda; padding:8px; -webkit-mask-image:radial-gradient(5px at 50% 0,#0000 98%,#000),radial-gradient(5px at 50% 100%,#0000 98%,#000),radial-gradient(5px at 0 50%,#0000 98%,#000),radial-gradient(5px at 100% 50%,#0000 98%,#000); mask-image:radial-gradient(5px at 50% 0,#0000 98%,#000),radial-gradient(5px at 50% 100%,#0000 98%,#000),radial-gradient(5px at 0 50%,#0000 98%,#000),radial-gradient(5px at 100% 50%,#0000 98%,#000); -webkit-mask-position:0 0,0 100%,0 0,100% 0; mask-position:0 0,0 100%,0 0,100% 0; -webkit-mask-size:17px 100%,17px 100%,100% 17px,100% 17px; mask-size:17px 100%,17px 100%,100% 17px,100% 17px; -webkit-mask-repeat:repeat-x,repeat-x,repeat-y,repeat-y; mask-repeat:repeat-x,repeat-x,repeat-y,repeat-y; -webkit-mask-composite:source-in; mask-composite:intersect;">
+          <div style="position:relative; height:172px; overflow:hidden; background:linear-gradient(180deg,#16264f 0%,#0a1430 58%,#1a0f2e 100%); border:1px solid rgba(0,0,0,.18);">
+            <div style="position:absolute; left:50%; top:44%; transform:translate(-50%,-50%); width:54px; height:54px; background:radial-gradient(circle,#ffe9a8,#e8b94f); clip-path:polygon(50% 0,61% 35%,98% 35%,68% 57%,79% 91%,50% 70%,21% 91%,32% 57%,2% 35%,39% 35%); box-shadow:0 0 20px rgba(255,210,120,.55);"></div>
+            <div style="position:absolute; left:0; right:0; bottom:0; height:15px; background:linear-gradient(90deg,#2a4bd0 0 33.3%,#f4ecda 33.3% 66.6%,#c0182f 66.6% 100%); opacity:.92;"></div>
+            <span style="position:absolute; top:7px; left:8px; font-family:'EB Garamond',serif; font-weight:600; font-size:8px; letter-spacing:.18em; color:rgba(255,255,255,.85);">WEST END</span>
+            <span style="position:absolute; top:6px; right:8px; font-family:'Playfair Display',serif; font-weight:700; font-size:13px; color:#fff;">1<span style="font-size:7px;">ST</span></span>
+          </div>
+          <div style="padding:8px 4px 4px; text-align:center;">
+            <div style="font-family:'Playfair Display',serif; font-weight:700; font-size:12.5px; line-height:1.02; color:#2a1208;">Les Misérables</div>
+            <div style="font-family:'EB Garamond',serif; font-size:7.5px; letter-spacing:.2em; color:#9a6a32; margin-top:3px; text-transform:uppercase;">London · Sondheim</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- MAMMA MIA! -->
+      <div data-stamp="mamma" style="{{ st_mamma }}" onPointerDown="{{ pd_mamma }}">
+        <div data-paper="1" style="background:#f4ecda; padding:8px; -webkit-mask-image:radial-gradient(5px at 50% 0,#0000 98%,#000),radial-gradient(5px at 50% 100%,#0000 98%,#000),radial-gradient(5px at 0 50%,#0000 98%,#000),radial-gradient(5px at 100% 50%,#0000 98%,#000); mask-image:radial-gradient(5px at 50% 0,#0000 98%,#000),radial-gradient(5px at 50% 100%,#0000 98%,#000),radial-gradient(5px at 0 50%,#0000 98%,#000),radial-gradient(5px at 100% 50%,#0000 98%,#000); -webkit-mask-position:0 0,0 100%,0 0,100% 0; mask-position:0 0,0 100%,0 0,100% 0; -webkit-mask-size:17px 100%,17px 100%,100% 17px,100% 17px; mask-size:17px 100%,17px 100%,100% 17px,100% 17px; -webkit-mask-repeat:repeat-x,repeat-x,repeat-y,repeat-y; mask-repeat:repeat-x,repeat-x,repeat-y,repeat-y; -webkit-mask-composite:source-in; mask-composite:intersect;">
+          <div style="position:relative; height:172px; overflow:hidden; background:linear-gradient(180deg,#33a0dd 0%,#1f78bd 54%,#eef2f5 54%,#dde6ee 100%); border:1px solid rgba(0,0,0,.18);">
+            <div style="position:absolute; left:50%; top:30px; transform:translateX(-50%); width:44px; height:44px; border-radius:50%; background:radial-gradient(circle,#fffef2,#ffe49a); box-shadow:0 0 24px rgba(255,235,160,.9);"></div>
+            <div style="position:absolute; left:50%; bottom:22px; transform:translateX(-50%); width:34px; height:34px; background:#ef5d6e; clip-path:polygon(50% 88%,12% 50%,12% 30%,30% 18%,50% 30%,70% 18%,88% 30%,88% 50%);"></div>
+            <span style="position:absolute; top:7px; left:8px; font-family:'EB Garamond',serif; font-weight:600; font-size:8px; letter-spacing:.18em; color:rgba(255,255,255,.95);">WEST END</span>
+            <span style="position:absolute; top:6px; right:8px; font-family:'Playfair Display',serif; font-weight:700; font-size:13px; color:#fff;">1<span style="font-size:7px;">ST</span></span>
+          </div>
+          <div style="padding:8px 4px 4px; text-align:center;">
+            <div style="font-family:'Playfair Display',serif; font-weight:700; font-size:13px; line-height:1.02; color:#2a1208;">Mamma Mia!</div>
+            <div style="font-family:'EB Garamond',serif; font-size:7.5px; letter-spacing:.2em; color:#9a6a32; margin-top:3px; text-transform:uppercase;">London · Novello</div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ============ TITLE ============ -->
+  <div style="position:absolute; top:0; left:0; right:0; z-index:6; display:flex; align-items:flex-start; justify-content:center; padding:36px 36px 0; pointer-events:none;">
+    <h1 style="margin:0; font-family:'Playfair Display', serif; font-style:italic; font-weight:700; color:#f3d9a0; font-size:clamp(30px,5vw,66px); letter-spacing:.01em; text-align:center; text-shadow:0 2px 18px rgba(0,0,0,.7), 0 0 40px rgba(255,220,150,.3);">Ghostlight</h1>
+  </div>
+
+  <!-- ============ SEARCH BUTTON ============ -->
+  <button onClick="{{ openSearch }}" aria-label="Search" style="position:absolute; top:30px; right:32px; z-index:7; width:48px; height:48px; border:none; background:transparent; cursor:pointer; padding:0;">
+    <span style="position:absolute; top:9px; left:9px; width:22px; height:22px; border:3px solid #f3d9a0; border-radius:50%; box-shadow:0 0 12px rgba(255,220,150,.3);"></span>
+    <span style="position:absolute; top:30px; left:28px; width:13px; height:3px; background:#f3d9a0; border-radius:2px; transform:rotate(45deg); transform-origin:left center;"></span>
+  </button>
+
+  <!-- ============ FULL-PAGE SEARCH ============ -->
+  <sc-if value="{{ searchOpen }}" hint-placeholder-val="{{ false }}">
+    <div onClick="{{ closeSearch }}" style="position:fixed; inset:0; z-index:50; background:rgba(7,2,5,.96); backdrop-filter:blur(5px); display:flex; flex-direction:column; align-items:center; justify-content:center; gap:30px; animation:fadeIn .3s ease;">
+      <div style="font-family:'EB Garamond',serif; font-size:12px; letter-spacing:.42em; color:#b88a4a; text-transform:uppercase; animation:searchRise .4s ease both;">Search the Repertoire</div>
+      <input value="{{ query }}" onInput="{{ onQuery }}" onClick="{{ stop }}" autoFocus="{{ true }}" placeholder="Title, theatre, or date seen…" style="width:min(660px,84vw); background:transparent; border:none; border-bottom:2px solid #f3d9a0; color:#f3e6c8; font-family:'Playfair Display',serif; font-style:italic; font-size:clamp(26px,4.2vw,42px); text-align:center; padding:14px 10px; outline:none; animation:searchRise .45s ease both;" />
+      <div style="font-family:'EB Garamond',serif; font-size:11px; letter-spacing:.06em; color:#7a6552; animation:searchRise .5s ease both;">Press Esc, or click anywhere, to close</div>
+    </div>
+  </sc-if>
+
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script>
+class Component extends DCLogic {
+  state = {
+    searchOpen: false,
+    query: '',
+    stamps: {
+      lk:      { x: 150, y: 60,  rot: -12, z: 2 },
+      phantom: { x: 235, y: 46,  rot: 7,   z: 4 },
+      wicked:  { x: 300, y: 72,  rot: 14,  z: 1 },
+      lesmis:  { x: 175, y: 150, rot: -7,  z: 3 },
+      mamma:   { x: 268, y: 166, rot: 10,  z: 5 },
+    },
+  };
+
+  componentDidMount() {
+    this.t0 = performance.now();
+    this.mouse = { x: window.innerWidth / 2 };
+    this._mm = (e) => { this.mouse.x = e.clientX; };
+    this._rz = () => this.layoutFolds();
+    this._key = (e) => { if (e.key === 'Escape') this.setState({ searchOpen: false }); };
+    window.addEventListener('mousemove', this._mm, { passive: true });
+    window.addEventListener('resize', this._rz);
+    window.addEventListener('keydown', this._key);
+    this._raf = requestAnimationFrame(this.loop);
+  }
+  componentWillUnmount() {
+    window.removeEventListener('mousemove', this._mm);
+    window.removeEventListener('resize', this._rz);
+    window.removeEventListener('keydown', this._key);
+    window.removeEventListener('pointermove', this.onMove);
+    window.removeEventListener('pointerup', this.onUp);
+    cancelAnimationFrame(this._raf);
+  }
+
+  setRoot = (el) => { this.root = el; if (el) requestAnimationFrame(this.layoutFolds); };
+
+  layoutFolds = () => {
+    if (!this.root) return;
+    const folds = this.root.querySelectorAll('[data-fold]');
+    const N = folds.length || 1;
+    const step = 100 / N;
+    const w = step * 1.55;
+    folds.forEach((el, i) => {
+      el.style.width = w + '%';
+      el.style.left = (i * step - (w - step) / 2) + '%';
+      el.dataset.center = (i * step + step / 2);
+    });
+  };
+
+  loop = (now) => {
+    const t = now - this.t0;
+    if (this.root) {
+      const folds = this.root.querySelectorAll('[data-fold]');
+      const W = window.innerWidth;
+      folds.forEach((el, i) => {
+        const cx = (parseFloat(el.dataset.center || 50) / 100) * W;
+        const phase = i * 0.55;
+        const idle = Math.sin(t * 0.0011 + phase) * 5;
+        const d = this.mouse.x - cx;
+        const dist = d / W;
+        const infl = Math.exp(-dist * dist * 9);
+        const lean = d * 0.035 * infl;
+        const sway = idle + lean;
+        const breathe = 1 + 0.012 * Math.sin(t * 0.0011 + phase);
+        el.style.transform = 'translateX(' + sway.toFixed(2) + 'px) skewX(' + (sway * 0.05).toFixed(3) + 'deg) scaleY(' + breathe.toFixed(4) + ')';
+      });
+    }
+    this._raf = requestAnimationFrame(this.loop);
+  };
+
+  // ---- stamp dragging ----
+  onDown = (id) => (e) => {
+    e.preventDefault();
+    const st = this.state.stamps[id];
+    this.drag = { id, sx: e.clientX, sy: e.clientY, x0: st.x, y0: st.y };
+    this.bringFront(id);
+    window.addEventListener('pointermove', this.onMove);
+    window.addEventListener('pointerup', this.onUp);
+  };
+  onMove = (e) => {
+    if (!this.drag) return;
+    const d = this.drag;
+    const nx = d.x0 + (e.clientX - d.sx);
+    const ny = d.y0 + (e.clientY - d.sy);
+    this.setState((s) => ({ stamps: { ...s.stamps, [d.id]: { ...s.stamps[d.id], x: nx, y: ny } } }));
+  };
+  onUp = () => {
+    this.drag = null;
+    window.removeEventListener('pointermove', this.onMove);
+    window.removeEventListener('pointerup', this.onUp);
+  };
+  bringFront = (id) => this.setState((s) => {
+    const mz = Math.max.apply(null, Object.values(s.stamps).map((v) => v.z));
+    return { stamps: { ...s.stamps, [id]: { ...s.stamps[id], z: mz + 1 } } };
+  });
+
+  openSearch = () => this.setState({ searchOpen: true });
+  closeSearch = () => this.setState({ searchOpen: false });
+  stop = (e) => e.stopPropagation();
+  onQuery = (e) => this.setState({ query: e.target.value });
+
+  renderVals() {
+    const folds = Array.from({ length: 16 }, (_, i) => ({ i }));
+    const out = {
+      folds,
+      setRoot: this.setRoot,
+      searchOpen: this.state.searchOpen,
+      query: this.state.query,
+      openSearch: this.openSearch,
+      closeSearch: this.closeSearch,
+      stop: this.stop,
+      onQuery: this.onQuery,
+    };
+    ['lk', 'phantom', 'wicked', 'lesmis', 'mamma'].forEach((id) => {
+      const st = this.state.stamps[id];
+      out['st_' + id] = {
+        position: 'absolute', left: st.x + 'px', top: st.y + 'px',
+        transform: 'rotate(' + st.rot + 'deg)', zIndex: st.z, width: '150px',
+        cursor: 'grab', touchAction: 'none', userSelect: 'none', WebkitUserSelect: 'none',
+        filter: 'drop-shadow(0 5px 10px rgba(0,0,0,.38))',
+      };
+      out['pd_' + id] = this.onDown(id);
+    });
+    return out;
+  }
+}
+</script>
+</body>
+</html>
