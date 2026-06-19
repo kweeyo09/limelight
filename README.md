@@ -1,27 +1,66 @@
 # Limelight — Theatre Log
 
-A theatrical, animated web page for logging West End shows you've seen. Ticket-stub
-"stamps" sit under a round spotlight against a softly swaying red stage curtain.
+A theatre log of West End shows seen, kept as draggable ticket stubs on a
+curtained stage. Built with **Next.js** (App Router, server API routes), a
+**three.js** GPU ambient layer, and the paper-cut "Limelight" UI from the
+Claude Design source.
 
-## Running
+## Stack
 
-It's a single static file — no build step, no dependencies.
+- **Next.js 16** (App Router) — SSR page + serverless API routes (the backend).
+- **React 19** — interactive client UI (`components/TheatreLog.tsx`).
+- **three.js** — `components/AmbientCanvas.tsx` renders slow-drifting dust motes
+  entirely on the GPU, so the continuous ambient motion costs almost no
+  main-thread time and the DOM curtains/tickets stay responsive.
 
-```sh
-# just open it
-start index.html        # Windows
-# or serve it
-python -m http.server   # then visit http://localhost:8000
+## Architecture
+
+```text
+app/
+  layout.tsx          fonts (Bodoni Moda + Spline Sans Mono) + metadata
+  page.tsx            server component → reads lib/shows → renders <TheatreLog/>
+  globals.css         extracted styles
+  api/
+    shows/route.ts    GET /api/shows         → full repertoire
+    search/route.ts   GET /api/search?q=…    → filtered results
+components/
+  TheatreLog.tsx      client UI: curtains, draggable stubs, live search
+  AmbientCanvas.tsx   three.js ambient dust layer
+lib/
+  shows.ts            data layer (single source of truth; swap for a DB later)
 ```
 
-Fonts (Playfair Display, EB Garamond) load from Google Fonts, so an internet
-connection gives the intended look.
+The search overlay calls `GET /api/search` live, so the frontend is wired to the
+backend rather than filtering a hardcoded array in the browser.
+
+## Develop
+
+```sh
+npm install
+npm run dev      # http://localhost:3000
+```
+
+## Build & run production
+
+```sh
+npm run build
+npm run start
+```
+
+## Deploy (Vercel)
+
+This app uses server API routes, so it runs on a Node host (not static GitHub
+Pages). Deploy on Vercel:
+
+1. Push to GitHub (done — `kweeyo09/ghostlight`).
+2. Import the repo at <https://vercel.com/new> — Vercel auto-detects Next.js;
+   no config needed. Every push to `main` then redeploys automatically.
+
+Or, with the Vercel CLI: `npm i -g vercel && vercel --prod`.
 
 ## Source
 
-The visual design originates from a Claude Design project ("theatre web"). The
-original component, authored in Claude Design's `.dc.html` runtime format
-(`x-dc` / `DCLogic` with `{{ }}` bindings), is preserved at
-[`Theatre Log.dc.html`](Theatre%20Log.dc.html) for reference. [`index.html`](index.html)
-is a standalone, framework-free implementation of that design in plain
-HTML/CSS/vanilla JS.
+The visual design originates from a Claude Design project ("theatre web"),
+authored in Claude Design's `.dc.html` runtime format. The original component is
+preserved at [`Theatre Log.dc.html`](Theatre%20Log.dc.html); this repo is a
+framework-ready implementation of it.

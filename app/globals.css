@@ -1,0 +1,329 @@
+:root {
+  --desk: #e4e2dd; /* grey desk tone (design default) */
+  --ink: #241f1a;
+  --paper: #f7f3ea;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  margin: 0;
+  padding: 0;
+  height: 100%;
+  background: var(--desk);
+  overflow: hidden;
+}
+
+body {
+  font-family: var(--font-mono), ui-monospace, monospace;
+  color: var(--ink);
+}
+
+@keyframes gl-fade {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes gl-rise {
+  from {
+    opacity: 0;
+    transform: translateY(16px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* ---- stage ---- */
+.stage {
+  position: fixed;
+  inset: 0;
+  overflow: hidden;
+  background: var(--desk);
+}
+
+/* three.js ambient layer sits behind everything */
+.ambient-canvas {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  display: block;
+}
+
+/* ---- valance ---- */
+.valance {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 3;
+  pointer-events: none;
+}
+
+.valance-bar {
+  position: relative;
+  height: 74px;
+  background: linear-gradient(180deg, oklch(0.56 0.094 34) 0%, oklch(0.49 0.098 33) 100%);
+  box-shadow: 0 5px 14px rgba(60, 24, 8, 0.22);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.valance-title {
+  font-family: var(--font-serif), Georgia, serif;
+  font-weight: 700;
+  font-size: 46px;
+  line-height: 1;
+  color: #f6ead2;
+  letter-spacing: 0.015em;
+  text-shadow: 0 1px 3px rgba(50, 18, 4, 0.45);
+}
+
+.swag-row {
+  display: flex;
+  align-items: flex-start;
+  height: 60px;
+}
+
+/* ---- side curtains ---- */
+.curtain {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  display: flex;
+  align-items: flex-start;
+  z-index: 1;
+  pointer-events: none;
+  width: min(27vw, 360px);
+}
+
+.curtain-left {
+  left: 0;
+  filter: drop-shadow(8px 0 16px rgba(60, 24, 8, 0.18));
+}
+
+.curtain-right {
+  right: 0;
+  filter: drop-shadow(-8px 0 16px rgba(60, 24, 8, 0.18));
+}
+
+/* ---- ticket stage ---- */
+.tickets {
+  position: fixed;
+  left: 50%;
+  top: 55%;
+  transform: translate(-50%, -50%);
+  width: 680px;
+  height: 500px;
+  z-index: 4;
+}
+
+.ticket-paper {
+  background: var(--paper);
+  padding: 0;
+  -webkit-mask-image: radial-gradient(5px at 50% 0, #0000 98%, #000),
+    radial-gradient(5px at 50% 100%, #0000 98%, #000),
+    radial-gradient(5px at 0 50%, #0000 98%, #000),
+    radial-gradient(5px at 100% 50%, #0000 98%, #000);
+  mask-image: radial-gradient(5px at 50% 0, #0000 98%, #000),
+    radial-gradient(5px at 50% 100%, #0000 98%, #000),
+    radial-gradient(5px at 0 50%, #0000 98%, #000),
+    radial-gradient(5px at 100% 50%, #0000 98%, #000);
+  -webkit-mask-position: 0 0, 0 100%, 0 0, 100% 0;
+  mask-position: 0 0, 0 100%, 0 0, 100% 0;
+  -webkit-mask-size: 18px 100%, 18px 100%, 100% 18px, 100% 18px;
+  mask-size: 18px 100%, 18px 100%, 100% 18px, 100% 18px;
+  -webkit-mask-repeat: repeat-x, repeat-x, repeat-y, repeat-y;
+  mask-repeat: repeat-x, repeat-x, repeat-y, repeat-y;
+  -webkit-mask-composite: source-in;
+  mask-composite: intersect;
+}
+
+.ticket-body {
+  padding: 13px 16px 15px;
+}
+
+.ticket-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  font-size: 8px;
+  letter-spacing: 0.24em;
+  color: #9a9082;
+}
+
+.ticket-title {
+  font-family: var(--font-serif), Georgia, serif;
+  font-weight: 700;
+  font-size: 22px;
+  line-height: 1.04;
+  color: var(--ink);
+  text-align: center;
+  text-wrap: balance;
+}
+
+.ticket-theatre {
+  text-align: center;
+  font-size: 8.5px;
+  letter-spacing: 0.2em;
+  color: #5e5446;
+  text-transform: uppercase;
+  margin-top: 4px;
+}
+
+.ticket-city {
+  text-align: center;
+  font-size: 7.5px;
+  letter-spacing: 0.26em;
+  color: #a59a89;
+  text-transform: uppercase;
+  margin-top: 4px;
+}
+
+.ticket-meta {
+  display: flex;
+  justify-content: space-between;
+  padding-top: 11px;
+}
+
+.meta-label {
+  color: #a59a89;
+  font-size: 7px;
+  letter-spacing: 0.26em;
+}
+
+.meta-value {
+  color: var(--ink);
+  font-size: 9.5px;
+  letter-spacing: 0.08em;
+  margin-top: 3px;
+}
+
+/* ---- search ---- */
+.search-btn {
+  position: absolute;
+  top: 58px;
+  right: 34px;
+  z-index: 7;
+  width: 46px;
+  height: 46px;
+  border: none;
+  background: transparent;
+  cursor: pointer;
+  padding: 0;
+}
+
+.search-btn .ring {
+  position: absolute;
+  top: 9px;
+  left: 9px;
+  width: 21px;
+  height: 21px;
+  border: 2.5px solid #f4eee2;
+  border-radius: 50%;
+}
+
+.search-btn .handle {
+  position: absolute;
+  top: 29px;
+  left: 27px;
+  width: 13px;
+  height: 2.5px;
+  background: #f4eee2;
+  border-radius: 2px;
+  transform: rotate(45deg);
+  transform-origin: left center;
+}
+
+.search-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 50;
+  background: rgba(244, 241, 234, 0.97);
+  backdrop-filter: blur(4px);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 28px;
+  animation: gl-fade 0.28s ease;
+}
+
+.search-eyebrow {
+  font-size: 11px;
+  letter-spacing: 0.42em;
+  color: #a8742f;
+  text-transform: uppercase;
+  animation: gl-rise 0.38s ease both;
+}
+
+.search-input {
+  width: min(640px, 84vw);
+  background: transparent;
+  border: none;
+  border-bottom: 2px solid var(--ink);
+  color: var(--ink);
+  font-family: var(--font-serif), serif;
+  font-style: italic;
+  font-weight: 500;
+  font-size: clamp(26px, 4vw, 40px);
+  text-align: center;
+  padding: 12px 10px;
+  outline: none;
+  animation: gl-rise 0.44s ease both;
+}
+
+.search-hint {
+  font-size: 10px;
+  letter-spacing: 0.08em;
+  color: #8a7d6a;
+  animation: gl-rise 0.5s ease both;
+}
+
+.search-results {
+  width: min(640px, 84vw);
+  max-height: 38vh;
+  overflow-y: auto;
+  animation: gl-rise 0.56s ease both;
+}
+
+.search-result {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 16px;
+  padding: 11px 4px;
+  border-top: 1px solid rgba(36, 31, 26, 0.14);
+}
+
+.search-result .sr-title {
+  font-family: var(--font-serif), serif;
+  font-size: 17px;
+  color: var(--ink);
+}
+
+.search-result .sr-sub {
+  font-size: 9px;
+  letter-spacing: 0.16em;
+  color: #8a7d6a;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+
+.search-empty {
+  font-size: 11px;
+  letter-spacing: 0.1em;
+  color: #8a7d6a;
+  padding: 16px 0;
+  text-align: center;
+}
