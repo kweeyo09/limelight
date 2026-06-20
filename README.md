@@ -1,5 +1,7 @@
 # Limelight — Theatre Log
 
+**Live:** <https://theatreboxd.vercel.app>
+
 A theatre log of West End shows seen, kept as draggable ticket stubs on a
 curtained stage. Built with **Next.js** (App Router, server API routes) and the
 paper-cut "Limelight" UI from the Claude Design source.
@@ -46,13 +48,8 @@ npm run start
 ## Deploy (Vercel)
 
 This app uses server API routes, so it runs on a Node host (not static GitHub
-Pages). Deploy on Vercel:
-
-1. Push to GitHub (done — `kweeyo09/ghostlight`).
-2. Import the repo at <https://vercel.com/new> — Vercel auto-detects Next.js;
-   no config needed. Every push to `main` then redeploys automatically.
-
-Or, with the Vercel CLI: `npm i -g vercel && vercel --prod`.
+Pages). It's deployed on Vercel at <https://theatreboxd.vercel.app>, imported
+from `kweeyo09/limelight`; every push to `main` redeploys automatically.
 
 ## Source
 
