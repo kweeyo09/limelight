@@ -396,9 +396,10 @@ body {
 
 /* ---- empty stage call-to-action ---- */
 .stage-empty {
-  position: absolute;
+  position: fixed;
   left: 50%;
-  top: 46%;
+  /* 134px = valance-bar (74px) + swag-row (60px); centre in the remaining stage */
+  top: calc(134px + (100vh - 134px) / 2);
   transform: translate(-50%, -50%);
   width: 380px;
   max-width: 80vw;
@@ -406,6 +407,7 @@ body {
   color: #f2e6cd;
   text-shadow: 0 1px 4px rgba(20, 8, 2, 0.6);
   animation: gl-rise 0.6s ease both;
+  z-index: 6;
 }
 
 .stage-empty-eyebrow {
@@ -478,10 +480,6 @@ body {
   cursor: pointer;
   opacity: 0;
   transition: opacity 0.15s ease, background 0.15s ease;
-}
-
-.ticket-paper:hover .ticket-remove {
-  opacity: 1;
 }
 
 .ticket-remove:hover {

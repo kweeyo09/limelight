@@ -344,22 +344,24 @@ export default function TheatreLog({ shows }: { shows: Show[] }) {
       <div className="spotlight" />
       <div className="spotlight-vignette" />
 
+      {/* ===== empty state (shown when no visits logged yet) ===== */}
+      {visits.length === 0 && (
+        <div className="stage-empty">
+          <div className="stage-empty-eyebrow">The stage is set</div>
+          <div className="stage-empty-title">No tickets stubbed yet</div>
+          <p>
+            Search the {shows.length} trending London shows, read a quick
+            overview, and log the ones you&rsquo;ve seen — each becomes a
+            draggable ticket stub here.
+          </p>
+          <button className="cta" onClick={() => setSearchOpen(true)}>
+            Search the repertoire
+          </button>
+        </div>
+      )}
+
       {/* ===== ticket stubs (logged visits) ===== */}
       <div className="tickets">
-        {visits.length === 0 && (
-          <div className="stage-empty">
-            <div className="stage-empty-eyebrow">The stage is set</div>
-            <div className="stage-empty-title">No tickets stubbed yet</div>
-            <p>
-              Search the {shows.length} trending London shows, read a quick
-              overview, and log the ones you&rsquo;ve seen — each becomes a
-              draggable ticket stub here.
-            </p>
-            <button className="cta" onClick={() => setSearchOpen(true)}>
-              Search the repertoire
-            </button>
-          </div>
-        )}
         {visits.map((t) => {
           const s = stamps[t.id];
           if (!s) return null;
