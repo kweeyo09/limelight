@@ -398,8 +398,7 @@ body {
 .stage-empty {
   position: fixed;
   left: 50%;
-  /* 134px = valance-bar (74px) + swag-row (60px); centre in the remaining stage */
-  top: calc(134px + (100vh - 134px) / 2);
+  top: 50%;
   transform: translate(-50%, -50%);
   width: 380px;
   max-width: 80vw;
