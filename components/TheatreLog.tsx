@@ -193,6 +193,7 @@ export default function TheatreLog({ shows }: { shows: Show[] }) {
   }, [onMove]);
 
   const onDown = (id: string) => (e: ReactPointerEvent) => {
+    if (window.matchMedia("(max-width: 700px)").matches) return;
     e.preventDefault();
     const st = stamps[id]; if (!st) return;
     drag.current = { id, sx: e.clientX, sy: e.clientY, x0: st.x, y0: st.y, moved: false };
@@ -275,7 +276,7 @@ export default function TheatreLog({ shows }: { shows: Show[] }) {
         <div className="stage-empty">
           <div className="stage-empty-eyebrow">The stage is set</div>
           <div className="stage-empty-title">No tickets stubbed yet</div>
-          <p>Search the {shows.length} trending London shows, read a quick overview, and log the ones you&rsquo;ve seen — each becomes a draggable ticket stub here.</p>
+          <p>Search the {shows.length} trending London shows, read a quick overview, and log the ones you&rsquo;ve seen — each becomes a ticket stub here.</p>
           <button className="cta" onClick={() => setSearchOpen(true)}>Search the repertoire</button>
         </div>
       )}
@@ -292,7 +293,7 @@ export default function TheatreLog({ shows }: { shows: Show[] }) {
             filter: "drop-shadow(0 2px 3px rgba(50,36,20,.2)) drop-shadow(0 10px 20px rgba(50,36,20,.16))",
           };
           return (
-            <div key={t.id} style={st} onPointerDown={onDown(t.id)}>
+            <div key={t.id} style={st} onPointerDown={onDown(t.id)} onClick={() => { if (window.matchMedia("(max-width: 700px)").matches) setExpandedVisit(t); }}>
               <div className="ticket-paper">
                 <div className="ticket-body">
                   <div className="ticket-head">
@@ -324,6 +325,7 @@ export default function TheatreLog({ shows }: { shows: Show[] }) {
 
       {searchOpen && (
         <div className="search-overlay" onClick={() => setSearchOpen(false)}>
+          <button className="search-close" aria-label="Close search" onClick={() => setSearchOpen(false)}>×</button>
           <div className="search-eyebrow">Search the Repertoire · {shows.length} trending London shows</div>
           <input
             className="search-input" value={query} autoFocus
