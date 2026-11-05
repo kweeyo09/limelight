@@ -42,6 +42,7 @@ const RIGHT: [number, number, number, number, number][] = [
 ];
 const SWAG_W = [1.1, 0.85, 1.25, 0.95, 1.15, 0.8, 1.2, 0.9, 1.1, 0.86, 1.18];
 const SWAG_H = [54, 40, 60, 46, 56, 38, 58, 44, 52, 42, 56];
+const BULBS = Array.from({ length: 17 }, (_, i) => i);
 
 function scatterPos(i: number): Stamp {
   const col = i % 3;
@@ -274,26 +275,33 @@ export default function TheatreLog({ shows }: { shows: Show[] }) {
 
       {visits.length === 0 && (
         <div className="stage-empty">
-          <div className="stage-empty-eyebrow">The stage is set</div>
-          <div className="stage-empty-title">No tickets stubbed yet</div>
-          <ol className="stage-steps">
-            <li>
-              <span className="step-num">01</span>
-              <span className="step-label">Search</span>
-              <span className="step-text">Browse {shows.length} trending London shows by title, theatre or genre.</span>
-            </li>
-            <li>
-              <span className="step-num">02</span>
-              <span className="step-label">Read</span>
-              <span className="step-text">Open any show for a quick overview and its theatre on the map.</span>
-            </li>
-            <li>
-              <span className="step-num">03</span>
-              <span className="step-label">Log it</span>
-              <span className="step-text">Add the date and seat. It lands here as a stub to drag or tap.</span>
-            </li>
-          </ol>
-          <button className="cta" onClick={() => setSearchOpen(true)}>Search the repertoire</button>
+          <span className="playbill-cord left" aria-hidden="true" />
+          <span className="playbill-cord right" aria-hidden="true" />
+          <div className="playbill">
+            <div className="playbill-bulbs" aria-hidden="true">{BULBS.map(i => <i key={i} />)}</div>
+            <div className="stage-empty-eyebrow">The stage is set</div>
+            <div className="stage-empty-title">No tickets stubbed yet</div>
+            <div className="playbill-rule" aria-hidden="true">✦</div>
+            <ol className="stage-steps">
+              <li>
+                <span className="step-num">Act I</span>
+                <span className="step-label">Search</span>
+                <span className="step-text">Browse {shows.length} trending London shows by title, theatre or genre.</span>
+              </li>
+              <li>
+                <span className="step-num">Act II</span>
+                <span className="step-label">Read</span>
+                <span className="step-text">Open any show for a quick overview and its theatre on the map.</span>
+              </li>
+              <li>
+                <span className="step-num">Act III</span>
+                <span className="step-label">Log it</span>
+                <span className="step-text">Add the date and seat. It lands here as a stub to drag or tap.</span>
+              </li>
+            </ol>
+            <button className="cta" onClick={() => setSearchOpen(true)}>Search the repertoire</button>
+            <div className="playbill-bulbs bottom" aria-hidden="true">{BULBS.map(i => <i key={i} />)}</div>
+          </div>
         </div>
       )}
 
