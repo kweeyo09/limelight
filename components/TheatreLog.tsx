@@ -28,7 +28,7 @@ function pleatStyle(w: number, h: number, rot: number, rad: number, dir: number)
     background: `linear-gradient(${dir}deg, oklch(0.57 0.17 28) 0%, oklch(0.48 0.185 28) 34%, oklch(0.36 0.15 27) 64%, oklch(0.5 0.18 28) 90%)`,
     borderBottomLeftRadius: rad + "px", borderBottomRightRadius: rad - 18 + "px",
     transform: `rotate(${rot}deg)`, transformOrigin: "50% 0%",
-    boxShadow: "-5px 0 11px rgba(64,26,10,.16)", willChange: "transform",
+    boxShadow: "-5px 0 11px rgba(130,26,14,.09)", willChange: "transform",
   };
 }
 
@@ -259,7 +259,7 @@ export default function TheatreLog({ shows }: { shows: Show[] }) {
               flexGrow: w, flexBasis: 0, height: SWAG_H[i] + "px",
               background: "linear-gradient(180deg, oklch(0.5 0.185 28) 0%, oklch(0.4 0.17 27) 100%)",
               borderBottomLeftRadius: "60% 100%", borderBottomRightRadius: "60% 100%",
-              boxShadow: "0 4px 8px rgba(60,24,8,.18)",
+              boxShadow: "0 4px 8px rgba(140,28,16,.1)",
             }} />
           ))}
         </div>
@@ -315,7 +315,7 @@ export default function TheatreLog({ shows }: { shows: Show[] }) {
             transform: `rotate(${s.rot}deg)`, zIndex: s.z,
             width: "210px", cursor: "pointer", touchAction: "none",
             userSelect: "none", WebkitUserSelect: "none",
-            filter: "drop-shadow(0 2px 3px rgba(50,36,20,.2)) drop-shadow(0 10px 20px rgba(50,36,20,.16))",
+            filter: "drop-shadow(0 2px 3px rgba(120,40,20,.12)) drop-shadow(0 10px 20px rgba(120,40,20,.09))",
           };
           return (
             <div key={t.id} style={st} onPointerDown={onDown(t.id)} onClick={() => { if (window.matchMedia("(max-width: 700px)").matches) setExpandedVisit(t); }}>

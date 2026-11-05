@@ -64,7 +64,7 @@ body {
   position: relative;
   height: 74px;
   background: linear-gradient(180deg, oklch(0.5 0.185 28) 0%, oklch(0.4 0.17 27) 100%);
-  box-shadow: 0 5px 14px rgba(60, 24, 8, 0.22);
+  box-shadow: 0 4px 12px rgba(140, 28, 16, 0.14);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -100,12 +100,12 @@ body {
 
 .curtain-left {
   left: 0;
-  filter: drop-shadow(8px 0 22px rgba(60, 24, 8, 0.26));
+  filter: drop-shadow(6px 0 16px rgba(150, 32, 18, 0.12));
 }
 
 .curtain-right {
   right: 0;
-  filter: drop-shadow(-8px 0 22px rgba(60, 24, 8, 0.26));
+  filter: drop-shadow(-6px 0 16px rgba(150, 32, 18, 0.12));
 }
 
 /* center seam shadow where the two drapes meet */
@@ -120,9 +120,9 @@ body {
   pointer-events: none;
   background: linear-gradient(
     90deg,
-    rgba(40, 16, 4, 0) 0%,
-    rgba(40, 16, 4, 0.34) 50%,
-    rgba(40, 16, 4, 0) 100%
+    rgba(120, 22, 14, 0) 0%,
+    rgba(120, 22, 14, 0.14) 50%,
+    rgba(120, 22, 14, 0) 100%
   );
 }
 
@@ -134,11 +134,12 @@ body {
   pointer-events: none;
   background: radial-gradient(
     circle 30vw at 50% 52%,
-    rgba(255, 240, 206, 0.52) 0%,
-    rgba(255, 238, 200, 0.26) 46%,
-    rgba(255, 236, 196, 0) 70%
+    rgba(255, 196, 120, 0.5) 0%,
+    rgba(255, 190, 110, 0.24) 46%,
+    rgba(255, 186, 104, 0) 70%
   );
-  mix-blend-mode: screen;
+  /* overlay keeps the velvet red saturated instead of washing it grey */
+  mix-blend-mode: overlay;
 }
 
 /* ---- ticket stage ---- */
@@ -439,7 +440,7 @@ body {
   background:
     url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 .35 0 0 0 0 .25 0 0 0 0 .12 0 0 0 .5 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='.22'/%3E%3C/svg%3E"),
     radial-gradient(120% 90% at 50% 0%, #fdfaf3 0%, var(--paper) 55%, #efe6d3 100%);
-  box-shadow: 0 2px 4px rgba(60, 24, 8, 0.22), 0 20px 46px rgba(60, 24, 8, 0.3);
+  box-shadow: 0 2px 4px rgba(140, 30, 16, 0.12), 0 18px 40px rgba(140, 30, 16, 0.16);
 }
 
 /* double gold rule, like an old programme cover */
@@ -618,7 +619,7 @@ body {
   border-radius: 4px;
   color: #2a1206;
   background: linear-gradient(180deg, #f1d79b 0%, #d9a85f 100%);
-  box-shadow: 0 4px 12px rgba(60, 24, 8, 0.3);
+  box-shadow: 0 4px 12px rgba(150, 70, 20, 0.2);
   transition: transform 0.12s ease, filter 0.12s ease;
 }
 
@@ -800,7 +801,7 @@ body {
   cursor: pointer;
   color: #2a1206;
   background: linear-gradient(180deg, #f1d79b 0%, #d9a85f 100%);
-  box-shadow: 0 3px 10px rgba(60, 24, 8, 0.22);
+  box-shadow: 0 3px 10px rgba(150, 70, 20, 0.16);
   transition: filter 0.12s ease;
 }
 
