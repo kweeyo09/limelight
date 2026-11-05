@@ -22,13 +22,19 @@ interface Stamp {
 const LOCAL_KEY = "limelight.visits";
 const MAPS_KEY = process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY;
 
+// Deep wine velvet: a lit crest, near-black fold, then the next crest.
 function pleatStyle(w: number, h: number, rot: number, rad: number, dir: number): CSSProperties {
+  // floor-length with a little natural hem variance (was 87–100%)
+  const len = 93 + ((h - 87) * 7) / 13;
+  // nearly straight hems with only a soft turn at the corners
+  const left = Math.round(rad * 0.16), right = Math.round((rad - 18) * 0.16);
   return {
-    flexGrow: w, flexBasis: 0, height: h + "%", alignSelf: "flex-start",
-    background: `linear-gradient(${dir}deg, oklch(0.57 0.17 28) 0%, oklch(0.48 0.185 28) 34%, oklch(0.36 0.15 27) 64%, oklch(0.5 0.18 28) 90%)`,
-    borderBottomLeftRadius: rad + "px", borderBottomRightRadius: rad - 18 + "px",
+    flexGrow: w, flexBasis: 0, height: len.toFixed(1) + "%", alignSelf: "flex-start",
+    background: `var(--velvet-texture), linear-gradient(${dir}deg, oklch(0.3 0.12 24) 0%, oklch(0.42 0.16 26) 20%, oklch(0.25 0.11 24) 44%, oklch(0.11 0.05 22) 68%, oklch(0.33 0.13 25) 92%)`,
+    borderBottomLeftRadius: `${left}px ${Math.round(left * 0.6)}px`,
+    borderBottomRightRadius: `${right}px ${Math.round(right * 0.6)}px`,
     transform: `rotate(${rot}deg)`, transformOrigin: "50% 0%",
-    boxShadow: "-5px 0 11px rgba(130,26,14,.09)", willChange: "transform",
+    boxShadow: "-6px 0 14px rgba(8,2,2,.35)", willChange: "transform",
   };
 }
 
@@ -119,6 +125,27 @@ export default function TheatreLog({ shows }: { shows: Show[] }) {
       return next;
     });
   }, [visits]);
+
+  // ---- followspot: a circle of light sized and centred on the playbill ----
+  const playbillRef = useRef<HTMLDivElement>(null);
+  const [spot, setSpot] = useState<CSSProperties>({});
+  const aimSpot = useCallback(() => {
+    const el = playbillRef.current; if (!el) return;
+    const r = el.getBoundingClientRect();
+    const radius = Math.hypot(r.width / 2, r.height / 2) + 28;
+    setSpot({
+      "--spot-x": `${(r.left + r.width / 2).toFixed(0)}px`,
+      "--spot-y": `${(r.top + r.height / 2).toFixed(0)}px`,
+      "--spot-r": `${radius.toFixed(0)}px`,
+    } as CSSProperties);
+  }, []);
+  useEffect(() => {
+    if (visits.length > 0) return;
+    // the drop animation ends ~1.15s in; aim then (also covers reduced motion), and on resize
+    const t = window.setTimeout(aimSpot, 1200);
+    window.addEventListener("resize", aimSpot);
+    return () => { window.clearTimeout(t); window.removeEventListener("resize", aimSpot); };
+  }, [visits.length, aimSpot]);
 
   // ---- curtain animation ----
   const pleatsRef  = useRef<HTMLDivElement[]>([]);
@@ -256,10 +283,11 @@ export default function TheatreLog({ shows }: { shows: Show[] }) {
         <div className="swag-row">
           {SWAG_W.map((w, i) => (
             <div key={i} style={{
-              flexGrow: w, flexBasis: 0, height: SWAG_H[i] + "px",
-              background: "linear-gradient(180deg, oklch(0.5 0.185 28) 0%, oklch(0.4 0.17 27) 100%)",
-              borderBottomLeftRadius: "60% 100%", borderBottomRightRadius: "60% 100%",
-              boxShadow: "0 4px 8px rgba(140,28,16,.1)",
+              flexGrow: w, flexBasis: 0, height: Math.round(SWAG_H[i] * 0.62) + "px",
+              background: "var(--velvet-texture), linear-gradient(180deg, oklch(0.36 0.14 25) 0%, oklch(0.24 0.1 24) 100%)",
+              borderBottomLeftRadius: "50% 70%", borderBottomRightRadius: "50% 70%",
+              borderBottom: "2px solid #b8893f",
+              boxShadow: "0 5px 10px rgba(8,2,2,.4)",
             }} />
           ))}
         </div>
@@ -272,11 +300,17 @@ export default function TheatreLog({ shows }: { shows: Show[] }) {
         {RIGHT.map((p, i) => <div key={i} ref={setPleat(LEFT.length + i)} style={pleatStyle(p[0],p[1],p[2],p[3],p[4])} />)}
       </div>
       <div className="curtain-seam" />
-      <div className="spotlight" />
+      {visits.length > 0 && <div className="spotlight" />}
 
-      {visits.length === 0 && <div className="stage-beam" aria-hidden="true" />}
       {visits.length === 0 && (
-        <div className="stage-empty">
+        <div className="stage-spot" aria-hidden="true" style={spot}>
+          <div className="spot-dim" />
+          <div className="spot-light" />
+          <div className="spot-glow" />
+        </div>
+      )}
+      {visits.length === 0 && (
+        <div className="stage-empty" ref={playbillRef} onAnimationEnd={aimSpot}>
           <span className="playbill-cord left" aria-hidden="true" />
           <span className="playbill-cord right" aria-hidden="true" />
           <div className="playbill">
