@@ -223,6 +223,8 @@ export default function TheatreLog({ shows }: { shows: Show[] }) {
     const data: { configured: boolean; visit?: LoggedVisit; error?: string } = await res.json();
     if (!res.ok || !data.visit) throw new Error(data.error ?? "Could not log visit");
     setVisits(v => { const next = [...v, data.visit as LoggedVisit]; if (!data.configured) saveLocal(next); return next; });
+    // logged: drop the search so the confirmation sits over the stage
+    setSearchOpen(false);
   }, []);
 
   const editVisit = useCallback(async (id: string, theatre: string, date: string, seat: string) => {
@@ -271,7 +273,6 @@ export default function TheatreLog({ shows }: { shows: Show[] }) {
       </div>
       <div className="curtain-seam" />
       <div className="spotlight" />
-      <div className="spotlight-vignette" />
 
       {visits.length === 0 && (
         <div className="stage-empty">
