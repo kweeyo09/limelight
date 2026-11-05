@@ -276,7 +276,23 @@ export default function TheatreLog({ shows }: { shows: Show[] }) {
         <div className="stage-empty">
           <div className="stage-empty-eyebrow">The stage is set</div>
           <div className="stage-empty-title">No tickets stubbed yet</div>
-          <p>Search the {shows.length} trending London shows, read a quick overview, and log the ones you&rsquo;ve seen — each becomes a ticket stub here.</p>
+          <ol className="stage-steps">
+            <li>
+              <span className="step-num">01</span>
+              <span className="step-label">Search</span>
+              <span className="step-text">Browse {shows.length} trending London shows by title, theatre or genre.</span>
+            </li>
+            <li>
+              <span className="step-num">02</span>
+              <span className="step-label">Read</span>
+              <span className="step-text">Open any show for a quick overview and its theatre on the map.</span>
+            </li>
+            <li>
+              <span className="step-num">03</span>
+              <span className="step-label">Log it</span>
+              <span className="step-text">Add the date and seat. It lands here as a stub to drag or tap.</span>
+            </li>
+          </ol>
           <button className="cta" onClick={() => setSearchOpen(true)}>Search the repertoire</button>
         </div>
       )}
