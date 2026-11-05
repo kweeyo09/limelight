@@ -274,6 +274,7 @@ export default function TheatreLog({ shows }: { shows: Show[] }) {
       <div className="curtain-seam" />
       <div className="spotlight" />
 
+      {visits.length === 0 && <div className="stage-beam" aria-hidden="true" />}
       {visits.length === 0 && (
         <div className="stage-empty">
           <span className="playbill-cord left" aria-hidden="true" />

@@ -1,5 +1,9 @@
 :root {
-  --desk: #e4e2dd; /* grey desk tone (design default) */
+  --desk: #0a0605; /* warm black stage floor */
+  --paper-grain: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='p'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 .32 0 0 0 0 .22 0 0 0 0 .1 0 0 0 .6 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23p)' opacity='.3'/%3E%3C/svg%3E");
+  --paper-fibre: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='400' height='400'%3E%3Cfilter id='p'%3E%3CfeTurbulence type='turbulence' baseFrequency='.01 .06' numOctaves='2' seed='7' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 .4 0 0 0 0 .28 0 0 0 0 .14 0 0 0 .55 -.12'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23p)' opacity='.26'/%3E%3C/svg%3E");
+  --paper-mottle: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='400' height='400'%3E%3Cfilter id='p'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.0125' numOctaves='3' seed='3' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 .55 0 0 0 0 .4 0 0 0 0 .2 0 0 0 .7 -.25'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23p)' opacity='.35'/%3E%3C/svg%3E");
+  --paper-texture: var(--paper-grain), var(--paper-fibre), var(--paper-mottle);
   --ink: #241f1a;
   --paper: #f7f3ea;
 }
@@ -154,7 +158,7 @@ body {
 }
 
 .ticket-paper {
-  background: var(--paper);
+  background: var(--paper-texture), var(--paper);
   padding: 0;
   -webkit-mask-image: radial-gradient(5px at 50% 0, #0000 98%, #000),
     radial-gradient(5px at 50% 100%, #0000 98%, #000),
@@ -380,6 +384,56 @@ body {
   text-align: center;
 }
 
+/* ---- spotlight beam on the playbill ---- */
+@keyframes beam-on {
+  0% { opacity: 0; }
+  8% { opacity: 0.75; }
+  13% { opacity: 0.12; }
+  21% { opacity: 0.95; }
+  27% { opacity: 0.4; }
+  36%, 100% { opacity: 1; }
+}
+
+.stage-beam {
+  position: fixed;
+  inset: 0;
+  z-index: 4;
+  pointer-events: none;
+  animation: beam-on 1.3s ease 0.75s backwards;
+}
+
+/* soft cone from a lamp above the valance; overlay keeps the velvet red */
+.stage-beam::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: conic-gradient(
+    from 160deg at 50% -8%,
+    rgba(255, 214, 150, 0) 0deg,
+    rgba(255, 206, 140, 0.3) 9deg,
+    rgba(255, 214, 150, 0.4) 20deg,
+    rgba(255, 206, 140, 0.3) 31deg,
+    rgba(255, 214, 150, 0) 40deg
+  );
+  -webkit-mask-image: linear-gradient(180deg, rgba(0, 0, 0, 0.35) 0%, #000 70%);
+  mask-image: linear-gradient(180deg, rgba(0, 0, 0, 0.35) 0%, #000 70%);
+  mix-blend-mode: overlay;
+}
+
+/* pool of light on the black floor */
+.stage-beam::after {
+  content: "";
+  position: absolute;
+  left: 50%;
+  bottom: -7vh;
+  width: min(900px, 120vw);
+  height: 17vh;
+  translate: -50% 0;
+  border-radius: 50%;
+  background: radial-gradient(closest-side, rgba(255, 186, 100, 0.46), rgba(255, 186, 100, 0.12) 62%, rgba(255, 186, 100, 0));
+  mix-blend-mode: screen;
+}
+
 /* ---- empty stage call-to-action: a playbill flown in on cords ---- */
 @keyframes playbill-drop {
   0%   { opacity: 0; transform: translateY(-90px) rotate(-2.2deg); }
@@ -438,8 +492,9 @@ body {
   padding: 46px 40px 40px;
   border-radius: 3px;
   background:
-    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 .35 0 0 0 0 .25 0 0 0 0 .12 0 0 0 .5 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='.22'/%3E%3C/svg%3E"),
-    radial-gradient(120% 90% at 50% 0%, #fdfaf3 0%, var(--paper) 55%, #efe6d3 100%);
+    var(--paper-texture),
+    radial-gradient(ellipse 70% 62% at 50% 18%, rgba(255, 251, 236, 0.95) 0%, rgba(255, 251, 236, 0) 72%),
+    radial-gradient(135% 110% at 50% 15%, #fbf5e8 0%, #f1e8d6 52%, #dccaa8 100%);
   box-shadow: 0 2px 4px rgba(140, 30, 16, 0.12), 0 18px 40px rgba(140, 30, 16, 0.16);
 }
 
@@ -662,7 +717,7 @@ body {
 /* large ticket paper — same perforated-edge mask, scaled up */
 .ticket-expand-paper {
   width: min(400px, 90vw);
-  background: var(--paper);
+  background: var(--paper-texture), var(--paper);
   position: relative;
   -webkit-mask-image:
     radial-gradient(9px at 50% 0,    #0000 98%, #000),
@@ -1119,7 +1174,7 @@ body {
  .ticket-expand-actions button {min-height:44px;}
 }
 @media(max-height:500px) and (orientation:landscape){.stage-empty{top:126px;translate:-50% 0;}.playbill{padding:22px 30px 20px;max-height:calc(100dvh - 132px);overflow-y:auto;}.stage-empty-eyebrow,.playbill-rule,.playbill-bulbs{display:none;}.stage-empty-title{font-size:24px;margin-top:0;}.stage-steps{margin:10px 0 12px;}.step-label{font-size:19px;}.step-text{font-size:12.5px;line-height:1.5;}.stage-empty .cta{padding:11px 22px;}}
-@media(prefers-reduced-motion:reduce){.stage-empty,.stage-empty .cta,.playbill-bulbs i,.stage-steps li,.detail-card,.search-overlay,.search-input,.search-results,.ticket-expand-wrap{animation:none;}}
+@media(prefers-reduced-motion:reduce){.stage-beam,.stage-empty,.stage-empty .cta,.playbill-bulbs i,.stage-steps li,.detail-card,.search-overlay,.search-input,.search-results,.ticket-expand-wrap{animation:none;}}
 
 .tickets:empty {pointer-events:none;}
 .valance {z-index:7;}
